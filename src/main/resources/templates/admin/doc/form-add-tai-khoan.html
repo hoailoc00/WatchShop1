@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+
+
+      <div class="app-title">
+        <ul class="app-breadcrumb breadcrumb">
+          <li class="breadcrumb-item">Danh sách tài khoản</li>
+          <li class="breadcrumb-item"><a href="#">Thêm tài khoản</a></li>
+        </ul>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <h3 class="tile-title">Tạo mới tài khoản</h3>
+            <div class="tile-body">
+              <form class="row" method="post" th:object="${accountDTO}">
+                <div class="form-group  col-md-6">
+                  <label class="control-label">Tên chủ tài khoản</label>
+                  <input class="form-control" type="text" th:field="${accountDTO.customer_name}" required>
+                </div>
+                <div class="form-group  col-md-6">
+                  <label class="control-label">Số điện thoại </label>
+                  <input class="form-control" type="text" th:field="${accountDTO.customer_phone}" required>
+                </div>
+                <div class="form-group  col-md-6">
+                  <label class="control-label">Địa chỉ </label>
+                  <input class="form-control" type="text" th:field="${accountDTO.customer_address}" required>
+                </div>
+                <div class="form-group  col-md-6">
+                  <label class="control-label">Email </label>
+                  <input class="form-control" type="text" th:field="${accountDTO.customer_email}" required>
+                </div>
+                <div class="form-group  col-md-6">
+                  <label class="control-label">Tài khoản </label>
+                  <input class="form-control" type="text" th:field="${accountDTO.account_name}" required>
+                </div>
+                <div class="form-group col-md-6 ">
+					<label class="control-label">Vai trò</label> 
+					<select class="form-control" th:field="${accountDTO.permission_id}" required>
+						<option value="0">-- Chọn vai trò --</option>
+						<option th:each="role : ${roles}"
+							th:text="${role.name}"
+							th:value="${role.permission_id}"></option>
+					</select>
+				</div>
+                <div class="form-group  col-md-6">
+                  <label class="control-label">Mật khẩu </label>
+                  <input class="form-control" type="password" th:field="${accountDTO.account_password}" required>
+                </div>
+                
+                <button class="btn btn-save" type="submit">Lưu lại</button>
+          		<a class="btn btn-cancel" href="WatchShop1/admin/account/pagecontrol?page=QLTK">Hủy bỏ</a>
+                </form>
+          </div>
+        </div>
+        </div>
+        </div>
+   <!-- Essential javascripts for application to work-->
+  <script src="js/jquery-3.2.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script><!-- The javascript plugin to display page loading on top-->
+  <script src="js/plugins/pace.min.js"></script>
+  </body>
+</html>

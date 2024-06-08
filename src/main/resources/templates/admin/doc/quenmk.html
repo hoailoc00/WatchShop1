@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Đăng nhập | Website hệ thống bán hàng</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/style_dangnhap/vendor/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/style_dangnhap/fonts/fonts-dangnhap/font-awesome-4.7.0/css/font-awesome.min.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/style_dangnhap/vendor/animate/animate.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/style_dangnhap/vendor/css-hamburgers/hamburgers.min.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/style_dangnhap/vendor/select2/select2.min.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/style_dangnhap/css/util.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/style_dangnhap/css/main.css}">
+<link
+	th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}"
+	rel="stylesheet">
+<link rel="stylesheet"
+	th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css}">
+<script
+	th:src="@{https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js}"></script>
+<link rel="stylesheet"
+	th:href="@{https://use.fontawesome.com/releases/v5.8.2/css/all.css}">
+<link rel="stylesheet"
+	th:href="@{https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css}">
+<link rel="stylesheet"
+	th:href="@{https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css}">
+<link rel="stylesheet"
+	th:href="@{https://unpkg.com/boxicons@latest/css/boxicons.min.css}">
+<!-- Main CSS-->
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+<link rel="stylesheet"
+	th:href="@{https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css}">
+<!-- or -->
+<link rel="stylesheet"
+	th:href="@{https://unpkg.com/boxicons@latest/css/boxicons.min.css}">
+<!-- Font-icon css-->
+<link rel="stylesheet" type="text/css"
+	th:href="@{https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+<link rel="stylesheet"
+	th:href="@{https://use.fontawesome.com/releases/v5.8.2/css/all.css}">
+<link rel="stylesheet"
+	th:href="@{https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css}">
+</head>
+ <body>
+        <div class="limiter">
+            <div class="container-login100">
+                <div class="wrap-login100">
+                    <div class="login100-pic js-tilt" data-tilt>
+                        <img src="./assets/images/watch-store.jpg" alt="IMG">
+                    </div>
+                    <form class="login100-form validate-form" action="sendEmail" method="post">
+
+
+                        <span class="login100-form-title">
+                            <b>KHÔI PHỤC MẬT KHẨU</b>
+                        </span>
+
+                        <div class="wrap-input100 validate-input"
+                             data-validate="Bạn cần nhập đúng thông tin như: ex@abc.xyz">
+                            <input class="input100" type="text" placeholder="Nhập email" name="guicho"
+                                   id="emailInput" value="" />
+                            <span class="focus-input100"></span>
+                            <span class="symbol-input100">
+                                <i class='bx bx-mail-send' ></i>
+                            </span>
+                        </div>
+                        <div class="wrap-input100 validate-input"
+                             data-validate="Bạn cần nhập đúng thông tin như: ex@abc.xyz">
+                            <input class="input100" type="text" placeholder="Nhập tên tài khoản" name="taikhoan"
+                                   id="emailInput" value="" />
+                        </div>
+                        
+                        <div class="container-login100-form-btn">
+                            <button>Gửi mật khẩu về Email</button>
+
+                        </div>
+
+                        <div class="text-center p-t-12">
+                            <a class="txt2" th:href="@{dangnhap}">
+                                Trở về đăng nhập
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--===============================================================================================-->
+        <script th:src="@{/js/main.js}"></script>
+        <!--===============================================================================================-->
+        <script th:src="@{/assets/vendor/jquery/jquery-3.2.1.min.js}"></script>
+        <!--===============================================================================================-->
+        <script th:src="@{/assets/vendor/bootstrap/js/popper.js}"></script>
+        <!--===============================================================================================-->
+        <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.min.js}"></script>
+        <!--===============================================================================================-->
+        <script th:src="@{/assets/vendor/select2/select2.min.js}"></script>
+        <!--===============================================================================================-->
+        <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+
+    </body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Account List</title>
+</head>
+<body>
+    <a th:href="@{accountlist}">Click here to view account list</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Password</th>
+                <th>Permission</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="account : ${accounts}">
+                <td th:text="${account.account_id}"></td>
+                <td th:text="${account.account_name}"></td>
+                <td th:text="${account.account_password}"></td>
+                <td th:text="${account.permission_id}"></td>
+                <td th:text="${account.is_deleted}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

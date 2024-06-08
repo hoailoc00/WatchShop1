@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<style>
+        
+        .confirmation-box {
+            width: 300px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 9999;
+            display: none;
+        }
+        .confirmation-box h2 {
+            margin-top: 0;
+        }
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .btn.cancel {
+            background-color: #dc3545;
+        }
+         .centered-alert {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #dff0d8; 
+        border: 1px solid #d6e9c6; 
+        color: #3c763d; 
+        padding: 30px;
+        border-radius: 10px; /* Tăng kích thước viền cong */
+        z-index: 9999; 
+        display: none; 
+        text-align: center; /* Căn giữa nội dung */
+    }
+
+    .centered-alert p {
+        margin-bottom: 20px; /* Khoảng cách dưới của đoạn văn bản */
+    }
+
+    .centered-alert button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px; /* Điều chỉnh kích thước nút bấm */
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    </style>
+    </head>
+<div class="app-title">
+	<ul class="app-breadcrumb breadcrumb side">
+		<li class="breadcrumb-item active"><a href="#"><b>Danh
+					sách khách hàng</b></a></li>
+	</ul>
+	<div id="clock"></div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="tile">
+			<div class="tile-body">
+
+				<div class="row element-button">
+					<div class="col-sm-2">
+
+						<a class="btn btn-add btn-sm"
+							th:href="@{/admin/add_customer/pagecontrol(page='Add_Customer')}" title="Thêm"><i
+							class="fas fa-plus"></i> Tạo mới khách hàng</a>
+					</div>
+					<div class="col-sm-2">
+						<a class="btn btn-delete btn-sm nhap-tu-file" type="button"
+							title="Nhập" onclick="myFunction(this)"><i
+							class="fas fa-file-upload"></i> Tải từ file</a>
+					</div>
+
+					<div class="col-sm-2">
+						<a class="btn btn-delete btn-sm print-file" type="button"
+							title="In" onclick="myApp.printTable()"><i
+							class="fas fa-print"></i> In dữ liệu</a>
+					</div>
+					<div class="col-sm-2">
+						<a class="btn btn-delete btn-sm print-file js-textareacopybtn"
+							type="button" title="Sao chép"><i class="fas fa-copy"></i>
+							Sao chép</a>
+					</div>
+
+					<div class="col-sm-2">
+						<a class="btn btn-excel btn-sm" href="" title="In"><i class="fas fa-file-excel"></i> Xuất Excel</a>
+					</div>
+					<div class="col-sm-2">
+						<a class="btn btn-delete btn-sm pdf-file" type="button" title="In"
+							onclick="myFunction(this)"><i class="fas fa-file-pdf"></i>
+							Xuất PDF</a>
+					</div>
+					<div class="col-sm-2">
+						<a class="btn btn-delete btn-sm" type="button" title="Xóa"
+							onclick="myFunction(this)"><i class="fas fa-trash-alt"></i>
+							Xóa tất cả </a>
+					</div>
+				</div>
+				<table class="table table-hover table-bordered js-copytextarea"
+					cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+					<thead>
+						<tr>
+							<th width="10"><input type="checkbox" id="all"></th>
+							<th width="150">Họ và tên</th>
+							<th>SĐT</th>
+							<th width="300">Địa chỉ</th>
+							<th>Email</th>
+							<th width="100">Tên tài khoản</th>
+							<th width="100">Tính năng</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="customer : ${customers}">
+							<td width="10"><input type="checkbox" name="check1"
+								value="1"></td>
+							<td th:text="${customer.customer_name}"></td>
+							<td th:text="${customer.customer_phone}"></td>
+							<td th:text="${customer.customer_address}"></td>
+							<td th:text="${customer.customer_email}"></td>
+							<td th:text="${customer.username}"></td>
+							<td>
+								<button class="btn btn-primary btn-sm delete-product"
+									type="button" title="Xóa"
+									th:onclick="'confirmDelete(\'' + ${customer.account_id} + '\')'">
+									<i class="fas fa-trash-alt"></i>
+								</button>
+									<button class="btn btn-primary btn-sm edit" type="button"
+										title="Sửa" data-toggle="modal" data-target="#ModalUP" 
+										th:data-customer-id="${customer.account_id}"
+										th:data-customer-name="${customer.customer_name}"
+										th:data-customer_phone="${customer.customer_phone}"
+										th:data-customer_address="${customer.customer_address}"
+										th:data-customer_email="${customer.customer_email}"
+										onclick="showEditModal(this)"> 
+										<i class="fas fa-edit"></i>
+									</button>
+								
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!--
+  MODAL
+-->
+<div class="modal fade" id="ModalUP" tabindex="-1" role="dialog"
+	aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<form method="post" th:object="${accountDTO}" >
+			<div class="modal-body">
+				<div class="row">
+					<div class="form-group  col-md-12">
+						<span class="thong-tin-thanh-toan">
+							<h5>Chỉnh sửa thông tin khách hàng cơ bản</h5>
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col-md-6">
+						<label class="control-label">ID khách hàng</label> 
+						<input class="form-control" type="text" th:field="${accountDTO.account_id}"
+							id="customer_id" readonly>
+					</div>
+					<div class="form-group col-md-6">
+						<label class="control-label">Họ và tên</label> <input
+							class="form-control" type="text" required th:field="${accountDTO.customer_name}"
+							id="customer_name">
+					</div>
+					<div class="form-group  col-md-6">
+						<label class="control-label">Số điện thoại</label> <input
+							class="form-control" type="text" required th:field="${accountDTO.customer_phone}"
+							id="customer_phone">
+					</div>
+					<div class="form-group  col-md-6">
+						<label class="control-label">Địa chỉ</label> <input
+							class="form-control" type="text" required th:field="${accountDTO.customer_address}"
+							id="customer_address">
+					</div>
+					<div class="form-group col-md-6">
+						<label class="control-label">Địa chỉ email</label> <input
+							class="form-control" type="text" required th:field="${accountDTO.customer_email}"
+							id="customer_email">
+					</div>
+				</div>
+				<BR> <a href="#"
+					style="float: right; font-weight: 600; color: #ea0000;">Chỉnh
+					sửa nâng cao</a> <BR> <BR>
+				<button class="btn btn-save" type="submit">Lưu lại</button>
+				<a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a> <BR>
+			</div>
+			<div class="modal-footer"></div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="confirmation-box" id="confirmationBox">
+	<h2>Xác nhận xóa khách hàng</h2>
+	<p>Bạn có chắc chắn muốn xóa khách hàng này không?</p>
+	<button class="btn" id="confirmButton">Xác nhận</button>
+	<button class="btn cancel" id="cancelButton">Hủy bỏ</button>
+</div>
+<div class="centered-alert" id="deleteSuccessAlert">
+    <p>Khách hàng đã được xóa thành công.</p>
+    <button class="btn" onclick="hideConfirmation()">Oke</button>
+
+
+</div>
+<div class="centered-alert" id="updateSuccessAlert">
+    <p>Khách hàng đã được sửa thành công.</p>
+    <button class="btn" onclick="hideConfirmation()">Oke</button>
+
+
+</div>
+<!--
+  MODAL
+-->
+
+  <!-- Essential javascripts for application to work-->
+  <script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+  <script th:src="@{/js/popper.min.js}"></script>
+  <script th:src="@{/js/bootstrap.min.js}"></script>
+  <script th:src="@{//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js}"></script>
+  <script th:src="@{/src/jquery.table2excel.js}"></script>
+  <script th:src="@{/js/main.js}"></script>
+  <!-- The javascript plugin to display page loading on top-->
+  <script th:src="@{/js/plugins/pace.min.js}"></script>
+  <!-- Page specific javascripts-->
+  <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js}"></script>
+  <!-- Data table plugin-->
+  <script type="text/javascript" th:src="@{/js/plugins/jquery.dataTables.min.js}"></script><script type="text/javascript" th:src="@{/js/plugins/dataTables.bootstrap.min.js}"></script>
+  <script type="text/javascript">$('#sampleTable').DataTable();</script>
+  <script>
+// Hiển thị khung hỏi khi người dùng nhấp vào nút xóa
+function confirmDelete(accountId) {
+    var confirmationBox = document.getElementById("confirmationBox");
+    confirmationBox.style.display = "block";
+
+    // Xử lý sự kiện khi người dùng xác nhận hoặc hủy bỏ
+    document.getElementById("confirmButton").onclick = function() {
+        // Chuyển hướng đến trang xóa sản phẩm khi người dùng xác nhận
+        window.location.href = "/WatchShop1/admin/qlkhachhang/delete/" + accountId;
+    };
+    document.getElementById("cancelButton").onclick = function() {
+        // Ẩn khung hỏi khi người dùng hủy bỏ
+        confirmationBox.style.display = "none";
+    };
+}
+</script>
+
+<script>
+    // Hàm để kiểm tra tham số truy vấn trong URL
+    function checkURLParams() {
+        // Lấy tham số truy vấn từ URL
+        var urlParams = new URLSearchParams(window.location.search);
+        
+        // Kiểm tra xem tham số "deleteSuccess" có tồn tại và có giá trị là "true" không
+        if (urlParams.has('deleteSuccess') && urlParams.get('deleteSuccess') === 'true') {
+            // Nếu có, hiển thị thông báo xóa thành công
+            document.querySelector('.centered-alert').style.display = 'block';
+        }
+    }
+
+    // Gọi hàm kiểm tra khi trang được tải
+    window.onload = checkURLParams;
+</script>
+<script>
+    // Hàm để ẩn thông báo và xóa tham số deleteSuccess=true khỏi URL
+    function hideConfirmation() {
+        // Ẩn thông báo
+        document.querySelector('.centered-alert').style.display = 'none';
+
+        // Lấy URL hiện tại
+        var currentUrl = window.location.href;
+
+        // Kiểm tra xem URL có chứa tham số deleteSuccess=true không
+        if (currentUrl.includes('deleteSuccess=true')) {
+            // Xóa tham số deleteSuccess=true
+            var newUrl = currentUrl.replace('&deleteSuccess=true', '');
+
+            // Thay đổi URL trên thanh địa chỉ của trình duyệt mà không cần load lại trang
+            window.history.replaceState({}, document.title, newUrl);
+        }
+    }
+</script>
+<script>
+    
+    oTable = $('#sampleTable').dataTable();
+    $('#all').click(function (e) {
+      $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
+      e.stopImmediatePropagation();
+    });
+
+    //EXCEL
+    // $(document).ready(function () {
+    //   $('#').DataTable({
+
+    //     dom: 'Bfrtip',
+    //     "buttons": [
+    //       'excel'
+    //     ]
+    //   });
+    // });
+
+
+    //Thời Gian
+    function time() {
+      var today = new Date();
+      var weekday = new Array(7);
+      weekday[0] = "Chủ Nhật";
+      weekday[1] = "Thứ Hai";
+      weekday[2] = "Thứ Ba";
+      weekday[3] = "Thứ Tư";
+      weekday[4] = "Thứ Năm";weekday[5] = "Thứ Sáu";
+      weekday[6] = "Thứ Bảy";
+      var day = weekday[today.getDay()];
+      var dd = today.getDate();
+      var mm = today.getMonth() + 1;
+      var yyyy = today.getFullYear();
+      var h = today.getHours();
+      var m = today.getMinutes();
+      var s = today.getSeconds();
+      m = checkTime(m);
+      s = checkTime(s);
+      nowTime = h + " giờ " + m + " phút " + s + " giây";
+      if (dd < 10) {
+        dd = '0' + dd
+      }
+      if (mm < 10) {
+        mm = '0' + mm
+      }
+      today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+      tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+        '</span>';
+      document.getElementById("clock").innerHTML = tmp;
+      clocktime = setTimeout("time()", "1000", "Javascript");
+
+      function checkTime(i) {
+        if (i < 10) {
+          i = "0" + i;
+        }
+        return i;
+      }
+    }
+    //In dữ liệu
+    var myApp = new function () {
+      this.printTable = function () {
+        var tab = document.getElementById('sampleTable');
+        var win = window.open('', '', 'height=700,width=700');
+        win.document.write(tab.outerHTML);
+        win.document.close();
+        win.print();
+      }
+    }
+    //     //Sao chép dữ liệu
+    //     var copyTextareaBtn = document.querySelector('.js-textareacopybtn');
+
+    // copyTextareaBtn.addEventListener('click', function(event) {
+    //   var copyTextarea = document.querySelector('.js-copytextarea');
+    //   copyTextarea.focus();
+    //   copyTextarea.select();
+
+    //   try {
+    //     var successful = document.execCommand('copy');
+    //     var msg = successful ? 'successful' : 'unsuccessful';
+    //     console.log('Copying text command was ' + msg);
+    //   } catch (err) {
+    //     console.log('Oops, unable to copy');
+    //   }
+    // });
+
+
+    //Modal
+//    $("#show-emp").on("click", function () {
+//      $("#ModalUP").modal({ backdrop: false, keyboard: false })
+//    });
+    function showEditModal(button) {
+    	
+        // Lấy các dữ liệu sản phẩm từ thuộc tính data
+        var customerId = button.getAttribute('data-customer-id');
+        var customerName = button.getAttribute('data-customer-name');
+        var customerPhone = button.getAttribute('data-customer_phone');
+        var customerAddress = button.getAttribute('data-customer_address');
+        var customerEmail = button.getAttribute('data-customer_email');
+        
+        // Log các giá trị để kiểm tra
+        //console.log("productId:", productId);
+
+
+        // Cập nhật các trường của modal với thông tin sản phẩm
+        $('#customer_id').val(customerId);
+        $('#customer_name').val(customerName);
+        $('#customer_phone').val(customerPhone);
+        $('#customer_address').val(customerAddress);
+        $('#customer_email').val(customerEmail);
+
+        // Kích hoạt modal
+        $('#ModalUP').modal('show');
+    }
+    </script>
+
+
+</html>

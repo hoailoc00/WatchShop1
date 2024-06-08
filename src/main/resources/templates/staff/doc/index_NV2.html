@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Quản trị Nhân viên | Nhập hàng </title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Main CSS-->
+  <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+  <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css}">
+  <!-- or -->
+  <link rel="stylesheet" th:href="@{https://unpkg.com/boxicons@latest/css/boxicons.min.css}">
+  <!-- Font-icon css-->
+  <link rel="stylesheet" type="text/css"
+    th:href="@{https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
+  <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js}"></script>
+  <link rel="stylesheet" th:href="@{https://use.fontawesome.com/releases/v5.8.2/css/all.css}">
+  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css}">
+</head>
+
+<body onload="time()" class="app sidebar-mini rtl">
+  <!-- Navbar-->
+  <header class="app-header">
+    <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
+      aria-label="Hide Sidebar"></a>
+    <!-- Navbar Right Menu-->
+    <ul class="app-nav">
+
+
+      <!-- User Menu-->
+      <li><a class="app-nav__item" href="#" data-toggle="modal" data-target="#logoutModal" ><i class='bx bx-log-out bx-rotate-180'></i>  </a>
+
+      </li>
+    </ul>
+  </header>
+  <!-- Sidebar menu-->
+  <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+  <aside class="app-sidebar">
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="./assets/images/team.jpg" width="50px"
+        alt="User Image">
+      <div>
+        <p class="app-sidebar__user-name"><b th:text="${account.username}"></b></p>
+        <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+      </div>
+    </div>
+    <hr>
+    <ul class="app-menu">
+      <li><a class="app-menu__item haha" ><i class='app-menu__icon bx bx-cart-alt'></i>
+          <span class="app-menu__label">Nhập Hàng</span></a></li>
+      
+    </ul>
+  </aside>
+  <main class="app-content">
+   <main class="app app-ban-hang">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="app-title">
+          <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><a href="#"><b>Nhập hàng</b></a></li>
+          </ul>
+          <div id="clock"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8">
+        <div class="tile">
+          <h3 class="tile-title">Bạn phải tạo mới đơn nhập hàng trước khi nhập sản phẩm !!!</h3>
+          <a th:href="@{/employee/addreceived}" style="background-color: #007bff; color: black; font-weight: bold; padding: 10px 20px; border: none; border-radius: 5px; text-decoration: none; display: inline-block;">
+    Tạo mới đơn nhập hàng
+</a>
+
+		<br>
+
+          
+        <div class="du--lieu-san-pham">
+          <table class="table table-hover table-bordered">
+            <thead>
+						<tr>
+							<th width="10"><input type="checkbox" id="all"></th>
+							<th>Mã sản phẩm</th>
+							<th>Tên sản phẩm</th>
+							<th>Ảnh</th>
+							<th>Số lượng</th>
+							<th>Nhà cung cấp</th>
+							<th>Giá nhập</th>
+							
+							
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="product : ${products}">
+							<td width="10"><input type="checkbox" name="check1"
+								value="1"></td>
+							<td th:text="${product.product_id}"></td>
+							<td th:text="${product.product_name}"></td>
+							<td><img
+								th:src="@{'/assets/img-sanpham/' + ${product.product_image}}"
+								alt="" width="100px;"></td>
+							<td th:text="${product.product_inventory}"></td>
+							<td><span class="badge bg-success"
+								th:text="${product.supplierEntity.supplierName}"></span></td>
+							<td>
+				    			<span th:text="${#numbers.formatInteger(product.product_inprice,3,'POINT')+ 'đ'}"></span>
+							</td>
+							
+							
+							
+						</tr>
+
+
+					</tbody>
+          </table>
+        </div>
+        <div class="alert">
+
+          <i class="fas fa-exclamation-triangle"></i> Gõ mã hoặc tên sản phẩm vào thanh tìm kiếm để thêm hàng vào đơn hàng
+        </div>
+        </div>
+      </div>
+      
+      </div>
+    
+  </main>
+  
+  
+  <!-- Modal đăng xuất -->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Xác Nhận Đăng Xuất</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có muốn đăng xuất không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <!-- Sử dụng th:attr để chuyển hướng đến trang đăng xuất khi nhấp vào nút Đăng Xuất -->
+                <a th:attr="href=@{/logout}" class="btn btn-primary">Đăng Xuất</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+  <!--===============================================================================================-->
+  <script th:src="@{/js/popper.min.js}"></script>
+  <script th:src="@{https://unpkg.com/boxicons@latest/dist/boxicons.js}"></script>
+  <!--===============================================================================================-->
+  <script th:src="@{/js/bootstrap.min.js}"></script>
+  <!--===============================================================================================-->
+  <script th:src="@{/js/main.js}"></script>
+  <!--===============================================================================================-->
+  <script th:src="@{/js/plugins/pace.min.js}"></script>
+  <!--===============================================================================================-->
+  <script type="text/javascript" th:src="@{/js/plugins/chart.js}"></script>
+  <!--===============================================================================================-->
+  <script type="text/javascript">
+    var data = {
+      labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
+      datasets: [{
+        label: "Dữ liệu đầu tiên",
+        fillColor: "rgba(255, 213, 59, 0.767), 212, 59)",
+        strokeColor: "rgb(255, 212, 59)",
+        pointColor: "rgb(255, 212, 59)",
+        pointStrokeColor: "rgb(255, 212, 59)",
+        pointHighlightFill: "rgb(255, 212, 59)",
+        pointHighlightStroke: "rgb(255, 212, 59)",
+        data: [20, 59, 90, 51, 56, 100]
+      },
+      {
+        label: "Dữ liệu kế tiếp",
+        fillColor: "rgba(9, 109, 239, 0.651)  ",
+        pointColor: "rgb(9, 109, 239)",
+        strokeColor: "rgb(9, 109, 239)",
+        pointStrokeColor: "rgb(9, 109, 239)",
+        pointHighlightFill: "rgb(9, 109, 239)",
+        pointHighlightStroke: "rgb(9, 109, 239)",
+        data: [48, 48, 49, 39, 86, 10]
+      }
+      ]
+    };
+    var ctxl = $("#lineChartDemo").get(0).getContext("2d");
+    var lineChart = new Chart(ctxl).Line(data);
+
+    var ctxb = $("#barChartDemo").get(0).getContext("2d");
+    var barChart = new Chart(ctxb).Bar(data);
+  </script>
+  <script type="text/javascript">
+    //Thời Gian
+    function time() {
+      var today = new Date();
+      var weekday = new Array(7);
+      weekday[0] = "Chủ Nhật";
+      weekday[1] = "Thứ Hai";
+      weekday[2] = "Thứ Ba";
+      weekday[3] = "Thứ Tư";
+      weekday[4] = "Thứ Năm";
+      weekday[5] = "Thứ Sáu";
+      weekday[6] = "Thứ Bảy";
+      var day = weekday[today.getDay()];
+      var dd = today.getDate();
+      var mm = today.getMonth() + 1;
+      var yyyy = today.getFullYear();
+      var h = today.getHours();
+      var m = today.getMinutes();
+      var s = today.getSeconds();
+      m = checkTime(m);
+      s = checkTime(s);
+      nowTime = h + " giờ " + m + " phút " + s + " giây";
+      if (dd < 10) {
+        dd = '0' + dd
+      }
+      if (mm < 10) {
+        mm = '0' + mm
+      }
+      today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+      tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+        '</span>';
+      document.getElementById("clock").innerHTML = tmp;
+      clocktime = setTimeout("time()", "1000", "Javascript");
+
+      function checkTime(i) {
+        if (i < 10) {
+          i = "0" + i;
+        }
+        return i;
+      }
+    }
+  </script>
+  <script>
+  document.querySelectorAll('tbody tr').forEach(function(row) {
+	    row.addEventListener('click', function() {
+	        var cells = this.cells;
+	        
+	        var productName = cells[2].textContent;
+	        var inprice = cells[6].textContent;
+	        // Trích xuất dữ liệu khác tương tự
+	        
+	     // Kiểm tra xem tên sản phẩm đã được chọn hay chưa
+	        if (productName.trim() !== '') {
+	            // Nếu đã chọn, cho phép nhập số lượng và bỏ thuộc tính readonly
+	            document.querySelector('#productNameInput').value = productName;
+	            document.querySelector('#amount').disabled = false;
+	            document.querySelector('#amount').removeAttribute('readonly');
+	        } else {
+	            // Nếu chưa chọn, không làm gì cả và đặt thuộc tính readonly
+	            document.querySelector('#productNameInput').value = '';
+	            document.querySelector('#amount').disabled = true;
+	            document.querySelector('#amount').setAttribute('readonly', 'readonly');
+	        }
+	    });
+	});
+
+  //bỏ chọn
+  // Thêm sự kiện click cho nút "Bỏ chọn"
+document.querySelector('.luu-va-in').addEventListener('click', function() {
+    // Xóa nội dung của trường nhập liệu tên sản phẩm
+    document.querySelector('#productNameInput').value = '';
+    // Làm trống trường nhập liệu số lượng
+    document.querySelector('#amount').value = '';
+ // Đặt lại thuộc tính readonly cho ô nhập số lượng
+    document.querySelector('#amount').setAttribute('readonly', 'readonly');
+});
+
+  //tính tổng tiền 
+  // Thêm sự kiện input cho ô nhập số lượng
+document.querySelector('#amount').addEventListener('input', function() {
+    // Lấy giá trị nhập vào
+    var inputAmount = this.value.trim();
+    // Kiểm tra xem giá trị nhập vào có phải là số hay không
+    if (!isNaN(inputAmount) && inputAmount !== '') {
+        // Lấy giá nhập từ ô tương ứng trong bảng (ví dụ: ô hàng đầu tiên)
+        var inputPrice = document.querySelector('tbody tr td:nth-child(7)').textContent;
+        // Tính tổng tiền
+        var totalPrice = parseFloat(inputAmount) * parseFloat(inputPrice.replace(/\D/g, ''));
+        // Hiển thị tổng tiền
+        document.querySelector('.control-all-money').textContent = totalPrice.toFixed(0) + ' VNĐ';
+    } else {
+        // Nếu giá trị nhập không phải là số hoặc rỗng, có thể xử lý theo ý của bạn ở đây
+        // Ví dụ: hiển thị một thông báo lỗi
+        alert('Vui lòng nhập số vào ô Số lượng nhập.');
+    }
+});
+
+</script>
+</body>
+
+</html>

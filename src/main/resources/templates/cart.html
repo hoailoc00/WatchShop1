@@ -1,0 +1,147 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" class="no-js" lang="zxx">
+<head th:replace="~{head :: head}"></head>
+
+<body>
+    <div class="alert alert-success" role="alert" th:if="${Success}">
+	    <span th:text="${Success}"></span>
+	</div>
+   <header th:replace="~{header :: header}">
+    </header>
+  <main>
+      <!-- Hero Area Start-->
+      <div class="slider-area ">
+          <div class="single-slider slider-height2 d-flex align-items-center">
+              <div class="container">
+                  <div class="row">
+                      <div class="col-xl-12">
+                          <div class="hero-cap text-center">
+                              <h2>Cart List</h2>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!--================Cart Area =================-->
+      <section class="cart_area section_padding">
+        <div class="container">
+          <div class="cart_inner">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="cart : ${Listcart}">
+                    <td>
+                      <div class="media">
+                        <div class="d-flex">
+                          <img th:src="${cart.product.product_image}" alt="" />
+                        </div>
+                        <div class="media-body">
+                          <p th:text="${cart.product.product_name}"></p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <h5 th:text="${cart.product.product_saleprice}"></h5>
+                    </td>
+                    <td>
+                      <div class="product_count">
+                        <input class="input-number" type="text" th:value="${cart.product_quantity}" readonly>
+                      </div>
+                    </td>
+                    <td>
+                      <h5 th:text="${cart.product_quantity * cart.product.product_saleprice}"></h5>
+                    </td>
+                    <td>
+                     <a class="btn" th:href="@{'/cart?delete='+${cart.product.product_id}}">X</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <h5>Sub total</h5>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                      <h5 th:text="${totalCart}"></h5>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="checkout_btn_inner float-right">
+                <a class="btn_1" href="shop">Continue Shopping</a>
+                <a class="btn_1 checkout_btn_1" th:href="@{/checkout}">Proceed to checkout</a>
+              </div>
+            </div>
+          </div>
+      </section>
+      <!--================End Cart Area =================-->
+  </main>>
+      <footer th:replace="~{footer :: footer}">
+        
+    </footer>
+  <!--? Search model Begin -->
+  <div class="search-model-box">
+      <div class="h-100 d-flex align-items-center justify-content-center">
+          <div class="search-close-btn">+</div>
+          <form class="search-model-form">
+              <input type="text" id="search-input" placeholder="Searching key.....">
+          </form>
+      </div>
+  </div>
+  <!-- Search model end -->
+
+    <!-- JS here -->
+
+        <script src="./assets11/js/vendor/modernizr-3.5.0.min.js"></script>
+        <!-- Jquery, Popper, Bootstrap -->
+        <script src="./assets11/js/vendor/jquery-1.12.4.min.js"></script>
+        <script src="./assets11/js/popper.min.js"></script>
+        <script src="./assets11/js/bootstrap.min.js"></script>
+        <!-- Jquery Mobile Menu -->
+        <script src="./assets11/js/jquery.slicknav.min.js"></script>
+
+        <!-- Jquery Slick , Owl-Carousel Plugins -->
+        <script src="./assets11/js/owl.carousel.min.js"></script>
+        <script src="./assets11/js/slick.min.js"></script>
+
+        <!-- One Page, Animated-HeadLin -->
+        <script src="./assets11/js/wow.min.js"></script>
+        <script src="./assets11/js/animated.headline.js"></script>
+        <script src="./assets11/js/jquery.magnific-popup.js"></script>
+
+        <!-- Scroll up, nice-select, sticky -->
+        <script src="./assets11/js/jquery.scrollUp.min.js"></script>
+        <script src="./assets11/js/jquery.nice-select.min.js"></script>
+        <script src="./assets11/js/jquery.sticky.js"></script>
+        
+        <!-- contact js -->
+        <script src="./assets11/js/contact.js"></script>
+        <script src="./assets11/js/jquery.form.js"></script>
+        <script src="./assets11/js/jquery.validate.min.js"></script>
+        <script src="./assets11/js/mail-script.js"></script>
+        <script src="./assets11/js/jquery.ajaxchimp.min.js"></script>
+        
+        <!-- Jquery Plugins, main Jquery -->    
+        <script src="./assets11/js/plugins.js"></script>
+        <script src="./assets11/js/main.js"></script>
+
+        <!-- swiper js -->
+        <script src="./assets11/js/swiper.min.js"></script>
+            <!-- swiper js -->
+        <script src="./assets11/js/mixitup.min.js"></script>
+        <script src="./assets11/js/jquery.counterup.min.js"></script>
+        <script src="./assets11/js/waypoints.min.js"></script>
+
+</body>
+</html>

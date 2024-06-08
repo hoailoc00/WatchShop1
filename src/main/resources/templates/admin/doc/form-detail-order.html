@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<style >
+	.total {
+		text-align: right;
+	}
+	  .centered-alert, .failure-alert {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #dff0d8; 
+        border: 1px solid #d6e9c6; 
+        color: #3c763d; 
+        padding: 30px;
+        border-radius: 10px; /* Tăng kích thước viền cong */
+        z-index: 9999; 
+        display: none; 
+        text-align: center; /* Căn giữa nội dung */
+    }
+
+    .centered-alert p, .failure-alert p {
+        margin-bottom: 20px; /* Khoảng cách dưới của đoạn văn bản */
+    }
+
+    .centered-alert button, .failure-alert button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px; /* Điều chỉnh kích thước nút bấm */
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .image-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        cursor: pointer;
+    }
+    
+    
+</style>
+</head>
+
+
+
+      <div class="app-title">
+        <ul class="app-breadcrumb breadcrumb">
+          <li class="breadcrumb-item">Quản lý đơn hàng</li>
+          <li class="breadcrumb-item"><a href="#">Duyệt đơn hàng</a></li>
+        </ul>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <h3 class="tile-title">Chi tiết thông tin đơn hàng</h3>
+            <div class="tile-body">
+              <div class="row">
+					<div class="form-group  col-md-12">
+						<span class="thong-tin-thanh-toan">
+							<p>Họ tên khách hàng: <h5 th:text="${orderdetails[0].orders.customer_id.customer_name}"></h5></p>
+
+							<p>Ngày tạo đơn hàng: <span th:text="${orderdetails[0].orders.order_date}"></span></p>
+						</span>
+					</div>
+				</div>
+				<table class="table table-hover table-bordered">
+            <thead>
+              <tr >
+               
+                <th class="so--luong">Mã hàng</th>
+                <th class="so--luong">Tên sản phẩm</th>
+                <th class="so--luong">Ảnh</th>
+                <th class="so--luong" width="10">Số lượng</th>
+                <th class="so--luong">Giá bán</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each=" orderdetail : ${orderdetails}">
+            
+                <td th:text="${orderdetail.product_order.product_id}"></td>
+                <td th:text="${orderdetail.product_order.product_name}"></td>
+                <td>
+                	<img th:src="@{'/assets/img-sanpham/' + ${orderdetail.product_order.product_image}}" alt="" width="100px;">
+                </td>
+                <td th:text="${orderdetail.product_quantity}"></td>
+                <td>
+				    <span th:text="${#numbers.formatCurrency(orderdetail.product_order.product_saleprice * orderdetail.product_quantity)}"></span>
+				</td>
+
+
+                
+              </tr>
+              
+            </tbody>
+            </table>
+            <div class="total" style="text-align: right;">
+			    Tổng tiền: 
+			    <span th:text="${#numbers.formatCurrency(totalAmount)}"></span>
+			</div>
+
+          </div>
+         <a class="btn btn-save" th:href="@{/admin/qldonhang/approve(order_id=${orderdetails[0].orders.order_id})}">Duyệt đơn</a>
+
+
+
+          <a class="btn btn-cancel" th:href="@{/admin/order/pagecontrol?page=QLĐH}">Trở về</a>
+        </div>
+        </div>
+        </div>
+<div class="centered-alert" id="">
+    <p>Đơn hàng đã được duyệt thành công.</p>
+    <button class="btn" onclick="hideConfirmation()">Oke</button>
+
+
+</div>
+
+
+<div class="failure-alert" style="display: none;">
+    <p>Đơn hàng đã giao!</p>
+    <button class="btn" onclick="hideConfirmation()">Oke</button>
+</div>
+
+
+   <!-- Essential javascripts for application to work-->
+  <script src="js/jquery-3.2.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+  <!-- The javascript plugin to display page loading on top-->
+  <script src="js/plugins/pace.min.js"></script>
+  <script>
+    // Hàm để ẩn thông báo và xóa tham số approveSuccess=true khỏi URL
+    function hideConfirmation() {
+        // Ẩn thông báo
+        document.querySelector('.centered-alert').style.display = 'none';
+        document.querySelector('.failure-alert').style.display = 'none';
+        // Lấy URL hiện tại
+        var currentUrl = window.location.href;
+
+        // Kiểm tra xem URL có chứa tham số approveSuccess=true không
+        if (currentUrl.includes('approveSuccess=true')) {
+            // Xóa tham số approveSuccess=true
+            var newUrl = currentUrl.replace('&approveSuccess=true', '');
+
+            // Thay đổi URL trên thanh địa chỉ của trình duyệt mà không cần load lại trang
+            window.history.replaceState({}, document.title, newUrl);
+        } else if (currentUrl.includes('approveSuccess=false')) {
+            // Xóa tham số approveSuccess=true
+            var newUrl = currentUrl.replace('&approveSuccess=false', '');
+
+            // Thay đổi URL trên thanh địa chỉ của trình duyệt mà không cần load lại trang
+            window.history.replaceState({}, document.title, newUrl);
+        } 
+    }
+
+    // Hàm để kiểm tra tham số truy vấn trong URL
+    function checkURLParams() {
+        // Lấy tham số truy vấn từ URL
+        var urlParams = new URLSearchParams(window.location.search);
+        
+        // Kiểm tra xem tham số "approveSuccess" có tồn tại và có giá trị là "true" không
+        if (urlParams.has('approveSuccess') && urlParams.get('approveSuccess') === 'true') {
+            // Nếu có, hiển thị thông báo duyệt thành công
+            document.querySelector('.centered-alert').style.display = 'block';
+        }else if (urlParams.has('approveSuccess') && urlParams.get('approveSuccess') === 'false') {
+            // Nếu có, hiển thị thông báo duyệt thất bại
+            document.querySelector('.failure-alert').style.display = 'block';
+        }
+    }
+
+    // Gọi hàm kiểm tra khi trang được tải
+    window.onload = checkURLParams;
+</script>
+  </body>
+</html>

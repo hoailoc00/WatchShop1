@@ -1,0 +1,109 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" class="no-js" lang="zxx">
+<head th:replace="~{head :: head}"></head>
+<body>
+	<header th:replace="~{header :: header}"> </header>
+	<main>
+		<!-- Hero Area Start-->
+		<div class="slider-area ">
+			<div class="single-slider slider-height2 d-flex align-items-center">
+				<div class="container">
+					<div class="row">
+						<div class="col-xl-12">
+							<div class="hero-cap text-center">
+								<h2>Order List</h2>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Products</th>
+					<th scope="col">Quantity</th>
+					<th scope="col">Total</th>
+					<th scope="col">Date</th>
+					<th scope="col">Condition</th>
+					<th scope="col">Details</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="orders:${order}">
+					<th scope="row" th:text="${orders.Order_id}"></th>
+					<td><p th:each="product : ${orders.listOrderDetails}"><span th:text="${product.product_order.product_name}"></span></p></td>
+					<td><p th:each="product : ${orders.listOrderDetails}"><span th:text="${product.product_quantity}"></span></p></td>
+					<td th:text="${orders.order_money}"></td>
+					<td th:text="${orders.order_date}"></td>
+					<td></td>
+					<td >
+						<a class="text-primary"th:href="@{/orderlistdetail/{id}(id=${orders.Order_id})}">More</a>
+						
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</main>
+	<footer th:replace="~{footer :: footer}"> </footer>
+	<!--? Search model Begin -->
+	<div class="search-model-box">
+		<div class="h-100 d-flex align-items-center justify-content-center">
+			<div class="search-close-btn">+</div>
+			<form class="search-model-form">
+				<input type="text" id="search-input"
+					placeholder="Searching key.....">
+			</form>
+		</div>
+	</div>
+	<!-- Search model end -->
+
+	<!-- JS here -->
+	<!-- JS here -->
+
+	<script src="./assets1/js/vendor/modernizr-3.5.0.min.js"></script>
+	<!-- Jquery, Popper, Bootstrap -->
+	<script src="./assets1/js/vendor/jquery-1.12.4.min.js"></script>
+	<script src="./assets1/js/popper.min.js"></script>
+	<script src="./assets1/js/bootstrap.min.js"></script>
+	<!-- Jquery Mobile Menu -->
+	<script src="./assets1/js/jquery.slicknav.min.js"></script>
+
+	<!-- Jquery Slick , Owl-Carousel Plugins -->
+	<script src="./assets1/js/owl.carousel.min.js"></script>
+	<script src="./assets1/js/slick.min.js"></script>
+
+	<!-- One Page, Animated-HeadLin -->
+	<script src="./assets1/js/wow.min.js"></script>
+	<script src="./assets1/js/animated.headline.js"></script>
+	<script src="./assets1/js/jquery.magnific-popup.js"></script>
+
+	<!-- Scroll up, nice-select, sticky -->
+	<script src="./assets1/js/jquery.scrollUp.min.js"></script>
+	<script src="./assets1/js/jquery.nice-select.min.js"></script>
+	<script src="./assets1/js/jquery.sticky.js"></script>
+
+	<!-- contact js -->
+	<script src="./assets1/js/contact.js"></script>
+	<script src="./assets1/js/jquery.form.js"></script>
+	<script src="./assets1/js/jquery.validate.min.js"></script>
+	<script src="./assets1/js/mail-script.js"></script>
+	<script src="./assets1/js/jquery.ajaxchimp.min.js"></script>
+
+	<!-- Jquery Plugins, main Jquery -->
+	<script src="./assets1/js/plugins.js"></script>
+	<script src="./assets1/js/main.js"></script>
+
+	<!-- swiper js -->
+	<script src="./assets1/js/swiper.min.js"></script>
+	<!-- swiper js -->
+	<script src="./assets1/js/mixitup.min.js"></script>
+	<script src="./assets1/js/jquery.counterup.min.js"></script>
+	<script src="./assets1/js/waypoints.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<style>
+        
+        .confirmation-box {
+            width: 300px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 9999;
+            display: none;
+        }
+        .confirmation-box h2 {
+            margin-top: 0;
+        }
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .btn.cancel {
+            background-color: #dc3545;
+        }
+         .centered-alert {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #dff0d8; 
+        border: 1px solid #d6e9c6; 
+        color: #3c763d; 
+        padding: 30px;
+        border-radius: 10px; /* Tăng kích thước viền cong */
+        z-index: 9999; 
+        display: none; 
+        text-align: center; /* Căn giữa nội dung */
+    }
+
+    .centered-alert p {
+        margin-bottom: 20px; /* Khoảng cách dưới của đoạn văn bản */
+    }
+
+    .centered-alert button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px; /* Điều chỉnh kích thước nút bấm */
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .image-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        cursor: pointer;
+    }
+    
+    </style>
+</head>
+
+
+<div class="app-title">
+	<ul class="app-breadcrumb breadcrumb side">
+		<li class="breadcrumb-item active"><a href="#"><b>Danh
+					sách sản phẩm</b></a></li>
+	</ul>
+	<div id="clock"></div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="tile">
+			<div class="tile-body">
+				<div class="row element-button">
+					<div class="col-sm-2">
+
+						<a class="btn btn-add btn-sm"
+							th:href="@{/admin/add_product/pagecontrol(page='Add_Product')}"
+							title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>
+					</div>
+					<div class="col-sm-2">
+						<a class="btn btn-delete btn-sm nhap-tu-file" type="button"
+							title="Nhập" onclick="myFunction(this)"><i
+							class="fas fa-file-upload"></i> Tải từ file</a>
+					</div>
+
+					<div class="col-sm-2">
+						<a class="btn btn-delete btn-sm print-file" type="button"
+							title="In" onclick="myApp.printTable()"><i
+							class="fas fa-print"></i> In dữ liệu</a>
+					</div>
+					<div class="col-sm-2">
+						<a class="btn btn-delete btn-sm print-file js-textareacopybtn"
+							type="button" title="Sao chép"><i class="fas fa-copy"></i>
+							Sao chép</a>
+					</div>
+
+					<div class="col-sm-2">
+						<a class="btn btn-excel btn-sm" href="" title="In"><i
+							class="fas fa-file-excel"></i> Xuất Excel</a>
+					</div>
+					<div class="col-sm-2">
+						<a class="btn btn-delete btn-sm pdf-file" type="button" title="In"
+							onclick="myFunction(this)"><i class="fas fa-file-pdf"></i>
+							Xuất PDF</a>
+					</div>
+					<div class="col-sm-2">
+						<a class="btn btn-delete btn-sm" type="button" title="Xóa"
+							onclick="myFunction(this)"><i class="fas fa-trash-alt"></i>
+							Xóa tất cả </a>
+					</div>
+				</div>
+				<table class="table table-hover table-bordered" id="sampleTable">
+					<thead>
+						<tr>
+							<th width="10"><input type="checkbox" id="all"></th>
+							<th>Mã sản phẩm</th>
+							<th>Tên sản phẩm</th>
+							<th>Ảnh</th>
+							<th>Số lượng</th>
+							<th>Nhà cung cấp</th>
+							<th>Giá tiền</th>
+							<th>Danh mục</th>
+							<th>Chức năng</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="product : ${products}">
+							<td width="10"><input type="checkbox" name="check1"
+								value="1"></td>
+							<td th:text="${product.product_id}"></td>
+							<td th:text="${product.product_name}"></td>
+							<td><img
+								th:src="@{'/assets/img-sanpham/' + ${product.product_image}}"
+								alt="" width="100px;"></td>
+							<td th:text="${product.product_inventory}"></td>
+							<td><span class="badge bg-success"
+								th:text="${product.supplierEntity.supplierName}"></span></td>
+							<td>
+							    <span th:text="${#numbers.formatInteger(product.product_saleprice,3,'POINT')} + ' đ'"></span>
+							</td>
+
+							<td th:text="${product.typeId.typeName}"></td>
+							<td >
+								<button class="btn btn-primary btn-sm delete-product"
+									type="button" title="Xóa"
+									th:onclick="'confirmDelete(\'' + ${product.product_id} + '\')'">
+									<i class="fas fa-trash-alt"></i>
+								</button>			
+									<button class="btn btn-primary btn-sm edit" type="button"
+										title="Sửa" id="show-emp" data-toggle="modal"
+										data-target="#ModalUP" 
+										th:data-product-id="${product.product_id}"
+										th:data-product-name="${product.product_name}"
+										th:data-product-inventory="${product.product_inventory}"
+										th:data-product-saleprice="${product.product_saleprice}"
+										th:data-product-inprice="${product.product_inprice}"
+										th:data-product-description="${product.product_description}"
+										th:data-product-image="${product.product_image}"
+										th:data-supplier-id="${product.supplierEntity.supplier_id}"
+										th:data-type-id="${product.typeId.type_id}"
+										onclick="showEditModal(this)">
+									<i class="fas fa-edit"></i>
+								</button>
+								
+							</td>
+						</tr>
+
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!--
+  MODAL
+-->
+<div class="modal fade" id="ModalUP" tabindex="-1" role="dialog"
+	aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<form method="post" th:object="${productDTO}" enctype="multipart/form-data">
+			<div class="modal-body">
+				<div class="row">
+					<div class="form-group  col-md-12">
+						<span class="thong-tin-thanh-toan">
+							<h5>Chỉnh sửa thông tin sản phẩm cơ bản</h5>
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col-md-6">
+						<label class="control-label" for="product_id">Mã sản phẩm </label> <input
+							class="form-control" type="number" id="product_id" th:field="${productDTO.product_id}" readonly>
+					</div>
+					<div class="form-group col-md-6">
+						<label class="control-label" for="product_name">Tên sản phẩm</label> 
+						<input class="form-control" type="text" required
+							id="product_name" th:field="${productDTO.product_name}" >
+					</div>
+					<div class="form-group  col-md-6">
+						<label class="control-label" for="product_inventory">Số lượng</label> <input
+							class="form-control" type="number" required
+							id="product_inventory" th:field="${productDTO.product_inventory}">
+					</div>
+					<div class="form-group col-md-6">
+						<label class="control-label" for="product_saleprice">Giá bán</label> <input
+							class="form-control" type="text" id="product_saleprice" th:field="${productDTO.product_saleprice}">
+					</div>
+					<div class="form-group col-md-6">
+						<label class="control-label" for="product_inprice">Giá nhập</label> <input
+							class="form-control" type="text" id="product_inprice" th:field="${productDTO.product_inprice}">
+					</div>
+					<div class="form-group col-md-6">
+						<label for="product_type" class="control-label">Danh mục</label>
+						<select class="form-control" id="product_type" th:field="${productDTO.type_id}">
+							<option th:each="type : ${types}" th:text="${type.typeName}"
+							th:value="${type.type_id}"></option>
+						</select>
+					</div>
+					<input type="hidden" id="current_image" name="current_image" value="đường_dẫn_hình_ảnh_cũ"> <!-- Thay đổi giá trị của value thành đường dẫn hình ảnh hiện tại -->
+					<div class="form-group col-md-6">
+						<label for="supplier" class="control-label">Nhà cung cấp</label>
+						<select class="form-control" id="supplier" th:field="${productDTO.supplier_id}">
+							<option th:each="supplier : ${suppliers}" th:text="${supplier.supplierName}"
+							 th:value="${supplier.supplier_id}" ></option>
+						</select>
+					</div>
+					<div class="form-group col-md-12">
+					    <label class="control-label">Ảnh sản phẩm</label>
+					   
+							<div id="myfileupload">
+								<input type="file" id="uploadfile" name="ImageUpload"
+									onchange="readURL(this);"
+									th:field="${productDTO.product_image}" />
+							</div>
+							<div id="thumbbox">
+								<img  width="150" alt="Thumb image" id="thumbimage"
+									style="display: none" /> 
+							</div>
+					    
+					</div>
+					<div class="form-group col-md-12">
+                		<label class="control-label" for="product_description">Mô tả sản phẩm</label>
+                		<textarea class="form-control" id="product_description"
+                		 th:field="${productDTO.product_description}"></textarea>     
+              		</div>
+				</div>
+				<BR> <a href="#"
+					style="float: right; font-weight: 600; color: #ea0000;">Chỉnh
+					sửa sản phẩm nâng cao</a> <BR> <BR>
+				<button class="btn btn-save" type="submit">Lưu lại</button>
+				<a class="btn btn-cancel" data-dismiss="modal" href="#" onclick="clearProductImage()">Hủy bỏ</a> <BR>
+			</div>
+			<div class="modal-footer"></div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="confirmation-box" id="confirmationBox">
+    <h2>Xác nhận xóa tài khoản</h2>
+    <p>Bạn có chắc chắn muốn xóa sản phẩm này không?</p>
+    <button class="btn" id="confirmButton">Xác nhận</button>
+    <button class="btn cancel" id="cancelButton">Hủy bỏ</button>
+</div>
+<div class="centered-alert" id="deleteSuccessAlert">
+    <p>Sản phẩm đã được xóa thành công.</p>
+    <button class="btn" onclick="hideConfirmation()">Oke</button>
+
+
+</div>
+<!--
+MODAL
+-->
+
+<!-- Essential javascripts for application to work-->
+<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script
+	th:src="@{//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js}"></script>
+<script th:src="@{/src/jquery.table2excel.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<!-- The javascript plugin to display page loading on top-->
+<script th:src="@{/js/plugins/pace.min.js}"></script>
+<!-- Page specific javascripts-->
+<script
+	th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js}"></script>
+<!-- Data table plugin-->
+<script type="text/javascript"
+	th:src="@{/js/plugins/jquery.dataTables.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/js/plugins/dataTables.bootstrap.min.js}"></script>
+<script>
+
+
+</script>
+
+<script>
+    // Hàm để ẩn thông báo và xóa tham số deleteSuccess=true khỏi URL
+    function hideConfirmation() {
+        // Ẩn thông báo
+        document.querySelector('.centered-alert').style.display = 'none';
+
+        // Lấy URL hiện tại
+        var currentUrl = window.location.href;
+
+        // Kiểm tra xem URL có chứa tham số deleteSuccess=true không
+        if (currentUrl.includes('deleteSuccess=true')) {
+            // Xóa tham số deleteSuccess=true
+            var newUrl = currentUrl.replace('&deleteSuccess=true', '');
+
+            // Thay đổi URL trên thanh địa chỉ của trình duyệt mà không cần load lại trang
+            window.history.replaceState({}, document.title, newUrl);
+        }
+    }
+</script>
+<script>
+    // Hàm để kiểm tra tham số truy vấn trong URL
+    function checkURLParams() {
+        // Lấy tham số truy vấn từ URL
+        var urlParams = new URLSearchParams(window.location.search);
+        
+        // Kiểm tra xem tham số "deleteSuccess" có tồn tại và có giá trị là "true" không
+        if (urlParams.has('deleteSuccess') && urlParams.get('deleteSuccess') === 'true') {
+            // Nếu có, hiển thị thông báo xóa thành công
+            document.querySelector('.centered-alert').style.display = 'block';
+        }
+    }
+
+    // Gọi hàm kiểm tra khi trang được tải
+    window.onload = checkURLParams;
+</script>
+<script>
+    // Hiển thị khung hỏi khi người dùng nhấp vào nút xóa
+    function confirmDelete(productId) {
+        var confirmationBox = document.getElementById("confirmationBox");
+        confirmationBox.style.display = "block";
+
+        // Xử lý sự kiện khi người dùng xác nhận hoặc hủy bỏ
+        document.getElementById("confirmButton").onclick = function() {
+            // Chuyển hướng đến trang xóa sản phẩm khi người dùng xác nhận
+            window.location.href = "/WatchShop1/admin/qlsanpham/delete/" + productId;
+        };
+        document.getElementById("cancelButton").onclick = function() {
+            // Ẩn khung hỏi khi người dùng hủy bỏ
+            confirmationBox.style.display = "none";
+        };
+    }
+</script>
+
+
+<script >
+var imagePreview;
+var imageContainer;
+function showEditModal(button) {
+	
+    // Lấy các dữ liệu sản phẩm từ thuộc tính data
+    var productId = button.getAttribute('data-product-id');
+    var productName = button.getAttribute('data-product-name');
+    var productInventory = button.getAttribute('data-product-inventory');
+    var productSalePrice = button.getAttribute('data-product-saleprice');
+    var productInPrice = button.getAttribute('data-product-inprice');
+    var productDescription = button.getAttribute('data-product-description');
+    var productImage = button.getAttribute('data-product-image');
+    var productSupplierId = button.getAttribute('data-supplier-id');
+    var productTypeId = button.getAttribute('data-type-id');
+    
+    // Kiểm tra xem có đường dẫn hình ảnh hiện tại hay không
+    if (productImage) {
+        // Tạo một phần tử div để chứa hình ảnh và dấu X
+        var imageContainer = document.createElement('div');
+        imageContainer.setAttribute('class', 'image-container');
+
+        // Tạo một đối tượng hình ảnh
+        var imagePreview = document.createElement('img');
+        imagePreview.setAttribute('src', '/WatchShop1/assets/img-sanpham/' + productImage);
+        imagePreview.setAttribute('alt', '');
+        imagePreview.style.width = '150px';
+        
+        // Tạo một phần tử <div> chứa dấu X
+        var closeButton = document.createElement('div');
+        closeButton.setAttribute('class', 'close-button');
+        closeButton.textContent = 'X';
+        
+        // Thêm sự kiện click cho dấu X để ẩn hình ảnh
+        closeButton.addEventListener('click', function() {
+            imageContainer.style.display = 'none';
+        });
+
+        // Thêm hình ảnh và dấu X vào phần tử <div> chứa
+        imageContainer.appendChild(imagePreview);
+        imageContainer.appendChild(closeButton);
+        
+        // Thêm phần tử <div> chứa vào thumbbox
+        document.getElementById('thumbbox').appendChild(imageContainer);
+    }
+    
+    // Log các giá trị để kiểm tra
+    console.log("productId:", productId);
+    console.log("productName:", productName);
+    console.log("productInventory:", productInventory);
+    console.log("productSalePrice:", productSalePrice);
+    console.log("productInPrice:", productInPrice);
+    console.log("productDescription:", productDescription);
+    console.log("productImage:", productImage);
+    console.log("productSupplierId:", productSupplierId);
+    console.log("productTypeId:", productTypeId);
+
+    // Cập nhật các trường của modal với thông tin sản phẩm
+    $('#product_id').val(productId);
+    $('#product_name').val(productName);
+    $('#product_inventory').val(productInventory);
+    $('#product_saleprice').val(productSalePrice);
+    $('#product_inprice').val(productInPrice);
+    $('#supplier').val(productSupplierId);
+    $('#product_type').val(productTypeId);
+    $('#product_description').val(productDescription);
+    $('#product_image').val(productImage);
+
+    // Kích hoạt modal
+    $('#ModalUP').modal('show');
+}
+//Hàm để xóa hình ảnh khi người dùng hủy bỏ
+function clearProductImage() {
+	 // Xóa hình ảnh cũ nếu nó tồn tại
+    if (imagePreview) {
+        imagePreview.remove(); // Xóa đối tượng hình ảnh khỏi DOM
+    }
+}
+</script>
+<script type="text/javascript">
+	$('#sampleTable').DataTable();
+	//Thời Gian
+	function time() {
+		var today = new Date();
+		var weekday = new Array(7);
+		weekday[0] = "Chủ Nhật";
+		weekday[1] = "Thứ Hai";
+		weekday[2] = "Thứ Ba";
+		weekday[3] = "Thứ Tư";
+		weekday[4] = "Thứ Năm";
+		weekday[5] = "Thứ Sáu";
+		weekday[6] = "Thứ Bảy";
+		var day = weekday[today.getDay()];
+		var dd = today.getDate();
+		var mm = today.getMonth() + 1;
+		var yyyy = today.getFullYear();
+		var h = today.getHours();
+		var m = today.getMinutes();
+		var s = today.getSeconds();
+		m = checkTime(m);
+		s = checkTime(s);
+		nowTime = h + " giờ " + m + " phút " + s + " giây";
+		if (dd < 10) {
+			dd = '0' + dd
+		}
+		if (mm < 10) {
+			mm = '0' + mm
+		}
+		today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+		tmp = '<span class="date"> ' + today + ' - ' + nowTime + '</span>';
+		document.getElementById("clock").innerHTML = tmp;
+		clocktime = setTimeout("time()", "1000", "Javascript");
+
+		function checkTime(i) {
+			if (i < 10) {
+				i = "0" + i;
+			}
+			return i;
+		}
+	}
+</script>
+<script>
+	oTable = $('#sampleTable').dataTable();
+	$('#all').click(
+			function(e) {
+				$('#sampleTable tbody :checkbox').prop('checked',
+						$(this).is(':checked'));
+				e.stopImmediatePropagation();
+			});
+</script>
+<script >
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+        	
+            $('#thumbimage').attr('src', e.target.result);
+            $('#thumbimage').show();
+        }
+
+        reader.readAsDataURL(input.files[0]); // Chuyển đổi sang chuỗi base64
+    }
+}
+
+</script>
+
+
+</html>

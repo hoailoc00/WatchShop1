@@ -1,0 +1,149 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" class="no-js" lang="zxx">
+<head th:replace="~{head :: head}"></head>
+<body>
+
+  <header th:replace="~{header :: header}">
+    </header>
+    <main>
+        <!-- Hero Area Start-->
+        <div class="slider-area ">
+            <div class="single-slider slider-height2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap text-center">
+                                <h2>Checkout</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--================Checkout Area =================-->
+        <section class="checkout_area section_padding">
+          <div class="container">
+            <div class="billing_details">
+              <div class="row">
+                <div class="col-lg-8">
+                  <h3>Billing Details</h3>
+                    <div class="col-md-12 form-group p_star">
+                      <span>Name:</span>
+                      <input type="text" class="form-control" id="name" th:value="${account.customer_name}"/>
+                    </div>
+                    <div class="col-md-12 form-group p_star">
+                      <span>Phone:</span>
+                      <input type="text" class="form-control" id="phone" th:value="${account.customer_phone}"/>
+                    </div>
+                    <div class="col-md-12 form-group p_star">
+                      <span>Address:</span>
+                      <input type="text" class="form-control" id="address" th:value="${account.customer_address}"/>
+                    </div>
+                    <div class="col-md-12 form-group p_star">
+                      <span>Email:</span>
+                      <input type="text" class="form-control" id="email" th:value="${account.customer_email}"/>
+                    </div>
+                </div>
+               
+                <div class="col-lg-4">
+                 <form class="row contact_form" th:action="@{/confirmation}" th:method="post" th:object="${order}">
+                  <div class="order_box">
+                    <h2>Your Order</h2>
+                    <ul class="list">
+                      <li>
+                        <a>Product
+                          <span class="last">Total</span>
+                        </a>
+                      </li>
+                      <li th:each="cart : ${Listcart}">
+                        <a>[[${cart.product.product_name}]]
+                          <span class="middle" th:text="'x '+${cart.product_quantity}"></span>
+                          <span class="last" th:text="${cart.product.product_saleprice * cart.product_quantity}"></span>
+                        </a>
+                      </li>
+                    </ul>
+                    <ul class="list list_2">
+                      <li>
+                        <a>Total
+                          <span th:text="${totalCart}"></span>              
+                        </a>
+                      </li>
+                    </ul>
+                    <div class="creat_account">
+                      <input type="checkbox" id="f-option4"/>
+                      <label for="f-option4">I’ve read and accept the </label>
+                      <a href="#">terms & conditions*</a>
+                          <input type="hidden" name="order_money" th:value="${totalCart}">       
+                          <input type="hidden" name="order_date" th:value="${date}">     
+                    <div class="proceed-to-pay">
+                        <button type="submit" value="submit" class="btn_3">PROCEED TO PAY</button>
+                    </div>
+                    </div>
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!--================End Checkout Area =================-->
+    </main>
+    <footer th:replace="~{footer :: footer}">
+        
+    </footer>
+    <!--? Search model Begin -->
+    <div class="search-model-box">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-btn">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Searching key.....">
+            </form>
+        </div>
+    </div>
+    <!-- Search model end -->
+
+    <!-- JS here -->
+
+        <script src="./assets/js/vendor/modernizr-3.5.0.min.js"></script>
+        <!-- Jquery, Popper, Bootstrap -->
+        <script src="./assets/js/vendor/jquery-1.12.4.min.js"></script>
+        <script src="./assets/js/popper.min.js"></script>
+        <script src="./assets/js/bootstrap.min.js"></script>
+        <!-- Jquery Mobile Menu -->
+        <script src="./assets/js/jquery.slicknav.min.js"></script>
+
+        <!-- Jquery Slick , Owl-Carousel Plugins -->
+        <script src="./assets/js/owl.carousel.min.js"></script>
+        <script src="./assets/js/slick.min.js"></script>
+
+        <!-- One Page, Animated-HeadLin -->
+        <script src="./assets/js/wow.min.js"></script>
+        <script src="./assets/js/animated.headline.js"></script>
+        <script src="./assets/js/jquery.magnific-popup.js"></script>
+
+        <!-- Scroll up, nice-select, sticky -->
+        <script src="./assets/js/jquery.scrollUp.min.js"></script>
+        <script src="./assets/js/jquery.nice-select.min.js"></script>
+        <script src="./assets/js/jquery.sticky.js"></script>
+        
+        <!-- contact js -->
+        <script src="./assets/js/contact.js"></script>
+        <script src="./assets/js/jquery.form.js"></script>
+        <script src="./assets/js/jquery.validate.min.js"></script>
+        <script src="./assets/js/mail-script.js"></script>
+        <script src="./assets/js/jquery.ajaxchimp.min.js"></script>
+        
+        <!-- Jquery Plugins, main Jquery -->    
+        <script src="./assets/js/plugins.js"></script>
+        <script src="./assets/js/main.js"></script>
+
+        <!-- swiper js -->
+        <script src="./assets/js/swiper.min.js"></script>
+            <!-- swiper js -->
+        <script src="./assets/js/mixitup.min.js"></script>
+        <script src="./assets/js/jquery.counterup.min.js"></script>
+        <script src="./assets/js/waypoints.min.js"></script>
+
+
+</body>
+</html>
